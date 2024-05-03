@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"strings"
 
+	"github.com/KarnerTh/mermerd/util"
+
 	"github.com/sirupsen/logrus"
 
 	"github.com/KarnerTh/mermerd/config"
@@ -93,7 +95,10 @@ func shouldSkipConstraint(config config.MermerdConfig, tables []ErdTableData, co
 	}
 
 	// if config for all constraints is not set, only show constraints of selected tables
-	return !(tableNameInSlice(tables, constraint.PkTable) && tableNameInSlice(tables, constraint.FkTable))
+	// ensure that both tables (including the schema are in the list of tables)
+	pkTable := getTableName(config, database.TableDetail{Schema: constraint.PkSchema, Name: constraint.PkTable})
+	fkTable := getTableName(config, database.TableDetail{Schema: constraint.FkSchema, Name: constraint.FkTable})
+	return !(tableNameInSlice(tables, pkTable) && tableNameInSlice(tables, fkTable))
 }
 
 func getConstraintData(config config.MermerdConfig, labelMap RelationshipLabelMap, constraint database.ConstraintResult) ErdConstraintData {
@@ -124,10 +129,5 @@ func getTableName(config config.MermerdConfig, table database.TableDetail) strin
 	separator := config.SchemaPrefixSeparator()
 	name := fmt.Sprintf("%s%s%s", table.Schema, separator, table.Name)
 
-	// if fullstop is used the table name needs to be escaped with quote marks
-	if separator == "." {
-		return fmt.Sprintf("\"%s\"", name)
-	}
-
-	return name
+	return util.QuoteTableName(name)
 }
