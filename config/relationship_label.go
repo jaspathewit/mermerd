@@ -2,6 +2,7 @@ package config
 
 import (
 	"errors"
+	"github.com/KarnerTh/mermerd/util"
 	"regexp"
 	"strings"
 
@@ -35,8 +36,8 @@ func parseLabel(label string) (RelationshipLabel, error) {
 	}
 
 	return RelationshipLabel{
-		PkName: string(groups[1]),
-		FkName: string(groups[2]),
+		PkName: util.QuoteTableName(string(groups[1])),
+		FkName: util.QuoteTableName(string(groups[2])),
 		Label:  string(groups[3]),
 	}, nil
 }
