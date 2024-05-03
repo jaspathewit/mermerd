@@ -303,6 +303,8 @@ func TestShouldSkipConstraint(t *testing.T) {
 		// Arrange
 		configMock := mocks.MermerdConfig{}
 		configMock.On("ShowAllConstraints").Return(false).Once()
+		configMock.On("ShowSchemaPrefix").Return(true)
+		configMock.On("SchemaPrefixSeparator").Return("_")
 		constraint := database.ConstraintResult{PkTable: tableName1, FkTable: "UnknownTable"}
 
 		// Act
@@ -317,6 +319,7 @@ func TestShouldSkipConstraint(t *testing.T) {
 		// Arrange
 		configMock := mocks.MermerdConfig{}
 		configMock.On("ShowAllConstraints").Return(false).Once()
+		configMock.On("ShowSchemaPrefix").Return(false)
 		constraint := database.ConstraintResult{PkTable: tableName1, FkTable: tableName2}
 
 		// Act

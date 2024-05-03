@@ -75,8 +75,8 @@ connectionStringSuggestions:
 		config.RelationshipLabels(),
 		[]RelationshipLabel{
 			{
-				PkName: "schema.table1",
-				FkName: "schema.table2",
+				PkName: "\"schema.table1\"",
+				FkName: "\"schema.table2\"",
 				Label:  "is_a",
 			},
 			{
